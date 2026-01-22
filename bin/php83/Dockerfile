@@ -89,6 +89,32 @@ libpng-dev && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg && \
     docker-php-ext-install gd
 
+
+# Install Node.js (system-wide, no nvm)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    ln -sf /usr/bin/node /usr/local/bin/node && \
+    ln -sf /usr/bin/npm /usr/local/bin/npm
+
+# Install Chromium Headless (Docker-safe)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        chromium-headless-shell \
+        libnss3 \
+        libatk1.0-0 \
+        libatk-bridge2.0-0 \
+        libcups2 \
+        libxkbcommon0 \
+        libxcomposite1 \
+        libxrandr2 \
+        libgbm1 \
+        libasound2 \
+        fonts-liberation && \
+    ln -sf /usr/bin/chromium-headless-shell /bin/chromium && \
+    rm -rf /var/lib/apt/lists/*
+
+
+
 # Insure an SSL directory exists
 RUN mkdir -p /etc/apache2/ssl
 
